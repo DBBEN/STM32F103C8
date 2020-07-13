@@ -8,10 +8,11 @@
 #ifndef INC_STM32F103C8_H_
 #define INC_STM32F103C8_H_
 
+#include <stddef.h>
 #include <stdint.h>
 
-
-#define __vo				volatile
+#define __vo volatile
+#define __weak __attribute__((weak))
 
 /********************************** [	PROCESSOR SPECIFIC DETAILS	] **********************************
  *
@@ -51,7 +52,17 @@
 #define IRQn_EXTI3							9
 #define IRQn_EXTI4							10
 #define IRQn_EXTI9_5						23
+#define IRQn_I2C1_EV						31
+#define IRQn_I2C1_ER						32
+#define IRQn_I2C2_EV						33
+#define IRQn_I2C2_ER						34
+#define IRQn_SPI1							35
+#define IRQn_SPI2							36
+#define IRQn_USART1							37
+#define IRQn_USART2							38
+#define IRQn_USART3							39
 #define IRQn_EXTI15_10						40
+
 
 // IRQ Priorities
 #define NVIC_IRQ_PRIORITY_DEFAULT			0
@@ -153,6 +164,17 @@ typedef struct
 	__vo uint32_t I2SPR;	//SPI I2S Prescalar Register
 }SPI_Regdef;
 
+typedef struct
+{
+	__vo uint32_t SR;		//USART Status Register
+	__vo uint32_t DR;		//USART Data Register
+	__vo uint32_t BRR;		//USART Baud Rate Register
+	__vo uint32_t CR1;		//USART Control Register 1
+	__vo uint32_t CR2;		//USART Control Register 2
+	__vo uint32_t CR3;		//USART Control Register 3
+	__vo uint32_t GTPR;		//USART Guard Time Prescaler Register
+}USART_Regdef;
+
 /*
 typedef struct
 {
@@ -238,7 +260,110 @@ typedef struct
 //-------------------------------------------------
 // Bit Position Macros
 
-//RCC_AHBENR
+//GPIO_CR BITPOS
+#define GPIO_CRL_MODE0					(3 << 0)
+#define GPIO_CRL_MODE0_0				(1 << 0)
+#define GPIO_CRL_MODE0_1				(2 << 0)
+#define GPIO_CRL_MODE1					(3 << 4)
+#define GPIO_CRL_MODE1_0				(1 << 4)
+#define GPIO_CRL_MODE1_1				(2 << 4)
+#define GPIO_CRL_MODE2					(3 << 8)
+#define GPIO_CRL_MODE2_0				(1 << 8)
+#define GPIO_CRL_MODE2_1				(2 << 8)
+#define GPIO_CRL_MODE3					(3 << 12)
+#define GPIO_CRL_MODE3_0				(1 << 12)
+#define GPIO_CRL_MODE3_1				(2 << 12)
+#define GPIO_CRL_MODE4					(3 << 16)
+#define GPIO_CRL_MODE4_0				(1 << 16)
+#define GPIO_CRL_MODE4_1				(2 << 16)
+#define GPIO_CRL_MODE5					(3 << 20)
+#define GPIO_CRL_MODE5_0				(1 << 20)
+#define GPIO_CRL_MODE5_1				(2 << 20)
+#define GPIO_CRL_MODE6					(3 << 24)
+#define GPIO_CRL_MODE6_0				(1 << 24)
+#define GPIO_CRL_MODE6_1				(2 << 24)
+#define GPIO_CRL_MODE7					(3 << 28)
+#define GPIO_CRL_MODE7_0				(1 << 28)
+#define GPIO_CRL_MODE7_1				(2 << 28)
+
+#define GPIO_CRL_CNF0					(3 << 2)
+#define GPIO_CRL_CNF0_0					(1 << 2)
+#define GPIO_CRL_CNF0_1					(2 << 2)
+#define GPIO_CRL_CNF1					(3 << 6)
+#define GPIO_CRL_CNF1_0					(1 << 6)
+#define GPIO_CRL_CNF1_1					(2 << 6)
+#define GPIO_CRL_CNF2					(3 << 10)
+#define GPIO_CRL_CNF2_0					(1 << 10)
+#define GPIO_CRL_CNF2_1					(2 << 10)
+#define GPIO_CRL_CNF3					(3 << 14)
+#define GPIO_CRL_CNF3_0					(1 << 14)
+#define GPIO_CRL_CNF3_1					(2 << 14)
+#define GPIO_CRL_CNF4					(3 << 18)
+#define GPIO_CRL_CNF4_0					(1 << 18)
+#define GPIO_CRL_CNF4_1					(2 << 18)
+#define GPIO_CRL_CNF5					(3 << 22)
+#define GPIO_CRL_CNF5_0					(1 << 22)
+#define GPIO_CRL_CNF5_1					(2 << 22)
+#define GPIO_CRL_CNF6					(3 << 26)
+#define GPIO_CRL_CNF6_0					(1 << 26)
+#define GPIO_CRL_CNF6_1					(2 << 26)
+#define GPIO_CRL_CNF7					(3 << 30)
+#define GPIO_CRL_CNF7_0					(1 << 30)
+#define GPIO_CRL_CNF7_1					(2 << 30)
+
+//------------------------
+
+#define GPIO_CRH_MODE8					(3 << 0)
+#define GPIO_CRH_MODE8_0				(1 << 0)
+#define GPIO_CRH_MODE8_1				(2 << 0)
+#define GPIO_CRH_MODE9					(3 << 4)
+#define GPIO_CRH_MODE9_0				(1 << 4)
+#define GPIO_CRH_MODE9_1				(2 << 4)
+#define GPIO_CRH_MODE10					(3 << 8)
+#define GPIO_CRH_MODE10_0				(1 << 8)
+#define GPIO_CRH_MODE10_1				(2 << 8)
+#define GPIO_CRH_MODE11					(3 << 12)
+#define GPIO_CRH_MODE11_0				(1 << 12)
+#define GPIO_CRH_MODE11_1				(2 << 12)
+#define GPIO_CRH_MODE12					(3 << 16)
+#define GPIO_CRH_MODE12_0				(1 << 16)
+#define GPIO_CRH_MODE12_1				(2 << 16)
+#define GPIO_CRH_MODE13					(3 << 20)
+#define GPIO_CRH_MODE13_0				(1 << 20)
+#define GPIO_CRH_MODE13_1				(2 << 20)
+#define GPIO_CRH_MODE14					(3 << 24)
+#define GPIO_CRH_MODE14_0				(1 << 24)
+#define GPIO_CRH_MODE14_1				(2 << 24)
+#define GPIO_CRH_MODE15					(3 << 28)
+#define GPIO_CRH_MODE15_0				(1 << 28)
+#define GPIO_CRH_MODE15_1				(2 << 28)
+
+#define GPIO_CRH_CNF8					(3 << 2)
+#define GPIO_CRH_CNF8_0					(1 << 2)
+#define GPIO_CRH_CNF8_1					(2 << 2)
+#define GPIO_CRH_CNF9					(3 << 6)
+#define GPIO_CRH_CNF9_0					(1 << 6)
+#define GPIO_CRH_CNF9_1					(2 << 6)
+#define GPIO_CRH_CNF10					(3 << 10)
+#define GPIO_CRH_CNF10_0				(1 << 10)
+#define GPIO_CRH_CNF10_1				(2 << 10)
+#define GPIO_CRH_CNF11					(3 << 14)
+#define GPIO_CRH_CNF11_0				(1 << 14)
+#define GPIO_CRH_CNF11_1				(2 << 14)
+#define GPIO_CRH_CNF12					(3 << 18)
+#define GPIO_CRH_CNF12_0				(1 << 18)
+#define GPIO_CRH_CNF12_1				(2 << 18)
+#define GPIO_CRH_CNF13					(3 << 22)
+#define GPIO_CRH_CNF13_0				(1 << 22)
+#define GPIO_CRH_CNF13_1				(2 << 22)
+#define GPIO_CRH_CNF14					(3 << 26)
+#define GPIO_CRH_CNF14_0				(1 << 26)
+#define GPIO_CRH_CNF14_1				(2 << 26)
+#define GPIO_CRH_CNF15					(3 << 30)
+#define GPIO_CRH_CNF15_0				(1 << 30)
+#define GPIO_CRH_CNF15_1				(2 << 30)
+
+//RCC_AHBENR BITPOS
 #define RCC_AHBENR_DMA1EN				0
 #define RCC_AHBENR_DMA2EN				1
 #define RCC_AHBENR_SRAMEN				2
@@ -249,7 +374,7 @@ typedef struct
 #define RCC_AHBENR_ETHMACTXEN			15
 #define RCC_AHBENR_ETHMACRXEN			16
 
-//RCC_APB1ENR
+//RCC_APB1ENR BITPOS
 #define RCC_APB1ENR_TIM2EN				0
 #define RCC_APB1ENR_TIM3EN				1
 #define RCC_APB1ENR_TIM4EN				2
@@ -274,7 +399,7 @@ typedef struct
 #define RCC_APB1ENR_PWREN				28
 #define RCC_APB1ENR_DACEN				29
 
-//RCC_APB2ENR
+//RCC_APB2ENR BITPOS
 #define RCC_APB2ENR_AFIOEN				0
 #define RCC_APB2ENR_IOAEN				2
 #define RCC_APB2ENR_IOBEN				3
@@ -294,7 +419,39 @@ typedef struct
 #define RCC_APB2ENR_TIM10EN				20
 #define RCC_APB2ENR_TIM11EN				21
 
+//SPI_CR1 BITPOS
+#define SPI_CR1_CPHA					0
+#define SPI_CR1_CPOL					1
+#define SPI_CR1_MSTR					2
+#define SPI_CR1_BR						3
+#define SPI_CR1_SPE						6
+#define SPI_CR1_LSBFIRST				7
+#define SPI_CR1_SSI						8
+#define SPI_CR1_SSM						9
+#define SPI_CR1_RXONLY					10
+#define SPI_CR1_DFF						11
+#define SPI_CR1_CRCNEXT					12
+#define SPI_CR1_CRCEN					13
+#define SPI_CR1_BIDIOE					14
+#define SPI_CR1_BIDIMODE				15
 
+//SPI_CR2 BITPOS
+#define SPI_CR2_RXDMAEN					0
+#define SPI_CR2_TXDMAEN					1
+#define SPI_CR2_SSOE					2
+#define SPI_CR2_ERRIE					5
+#define SPI_CR2_RXNEIE					6
+#define SPI_CR2_TXEIE					7
+
+//SPI_SR BITPOS
+#define SPI_SR_RXNE						0
+#define SPI_SR_TXE						1
+#define SPI_SR_CHSIDE					2
+#define SPI_SR_UDR						3
+#define SPI_SR_CRCERR					4
+#define SPI_SR_MODF						5
+#define SPI_SR_OVR						6
+#define SPI_SR_BSY						7
 
 //-------------------------------------------------
 // Peripheral Registers Definition
@@ -314,6 +471,9 @@ typedef struct
 #define SPI1					( (SPI_Regdef *) SPI1_BASE )
 #define SPI2					( (SPI_Regdef *) SPI2_BASE )
 #define SPI3					( (SPI_Regdef *) SPI3_BASE )
+#define USART1					( (USART_Regdef *) USART1_BASE )
+#define USART2					( (USART_Regdef *) USART2_BASE )
+#define USART3					( (USART_Regdef *) USART3_BASE )
 
 //-------------------------------------------------
 // Clock Function Macros
@@ -386,7 +546,7 @@ typedef struct
 //-------------------------------------------------
 // Driver Files
 
-#include "stm32f103c8_gpio_driver.h"
-#include "stm32f103c8_spi_driver.h"
+//#include "stm32f103c8_gpio_driver.h"
+//#include "stm32f103c8_spi_driver.h"
 
 #endif /* INC_STM32F103C8_H_ */
